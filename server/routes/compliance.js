@@ -1,16 +1,18 @@
 const express = require('express');
-const { Compliance } = require('../models');
+const { Compliance, sequelize } = require('../models');
 const auth = require('../middleware/auth');
-const { callOpenRouter } = require('../services/openrouter');
+const aiRateLimiter = require('../middleware/aiRateLimiter');
+const { callOpenRouter, parseAIJson, persistAIResult } = require('../services/openrouter');
 const router = express.Router();
 
 router.get('/', auth, async (req, res) => {
   try {
-    const items = await Compliance.findAll({ order: [['createdAt', 'DESC']] });
-    res.json(items);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20;
+    const offset = (page - 1) * limit;
+    const { count, rows } = await Compliance.findAndCountAll({ order: [['createdAt', 'DESC']], limit, offset });
+    res.json({ data: rows, pagination: { page, limit, total: count, totalPages: Math.ceil(count / limit) } });
+  } catch (error) { res.status(500).json({ error: error.message }); }
 });
 
 router.get('/:id', auth, async (req, res) => {
@@ -18,18 +20,14 @@ router.get('/:id', auth, async (req, res) => {
     const item = await Compliance.findByPk(req.params.id);
     if (!item) return res.status(404).json({ error: 'Not found' });
     res.json(item);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+  } catch (error) { res.status(500).json({ error: error.message }); }
 });
 
 router.post('/', auth, async (req, res) => {
   try {
     const item = await Compliance.create(req.body);
     res.status(201).json(item);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+  } catch (error) { res.status(500).json({ error: error.message }); }
 });
 
 router.put('/:id', auth, async (req, res) => {
@@ -38,9 +36,7 @@ router.put('/:id', auth, async (req, res) => {
     if (!item) return res.status(404).json({ error: 'Not found' });
     await item.update(req.body);
     res.json(item);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+  } catch (error) { res.status(500).json({ error: error.message }); }
 });
 
 router.delete('/:id', auth, async (req, res) => {
@@ -49,44 +45,25 @@ router.delete('/:id', auth, async (req, res) => {
     if (!item) return res.status(404).json({ error: 'Not found' });
     await item.destroy();
     res.json({ message: 'Deleted successfully' });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+  } catch (error) { res.status(500).json({ error: error.message }); }
 });
 
-router.post('/:id/analyze', auth, async (req, res) => {
+router.post('/:id/analyze', auth, aiRateLimiter, async (req, res) => {
   try {
     const item = await Compliance.findByPk(req.params.id);
     if (!item) return res.status(404).json({ error: 'Not found' });
 
-    const prompt = `You are an expert in vehicle certification and state compliance regulations. Analyze the compliance status for this vehicle.
+    const prompt = `Analyze compliance for ${item.vehicleYear} ${item.vehicleMake} ${item.vehicleModel} in ${item.state}. Emissions: ${item.emissionsStatus}, Safety: ${item.safetyStatus}. Return ONLY valid JSON:
+{"compliant":true,"state":"${item.state}","violations":[],"required_repairs":[],"estimated_cost":0}`;
 
-Vehicle: ${item.vehicleYear} ${item.vehicleMake} ${item.vehicleModel}
-VIN: ${item.vin || 'N/A'}
-State: ${item.state}
-Current Emissions Status: ${item.emissionsStatus}
-Current Safety Status: ${item.safetyStatus}
+    const aiResult = await callOpenRouter(prompt, 'You are a vehicle compliance expert. Return ONLY valid JSON.');
+    const parsed = parseAIJson(aiResult.content) || { compliant: false, state: item.state, violations: [], required_repairs: [], estimated_cost: 0 };
 
-Provide a detailed compliance analysis including:
-1. State-Specific Requirements for ${item.state}
-2. Emissions Standards & Testing Requirements
-3. Safety Inspection Requirements
-4. Registration Requirements
-5. Insurance Minimums
-6. Special Provisions or Exemptions
-7. Upcoming Regulatory Changes
-8. Compliance Checklist with Pass/Fail items
-9. Estimated Costs for Full Compliance
-10. Recommended Actions & Timeline
+    await item.update({ aiAnalysis: { ...parsed, model: aiResult.model, analyzedAt: new Date() } });
+    await persistAIResult(sequelize, req.user?.id, 'compliance/analyze', { id: item.id }, parsed);
 
-Format your response as a structured compliance report.`;
-
-    const aiResult = await callOpenRouter(prompt, 'You are an expert in US vehicle compliance regulations and state certification requirements.');
-    await item.update({ aiAnalysis: { analysis: aiResult.content, model: aiResult.model, analyzedAt: new Date() } });
-    res.json({ ...item.toJSON(), aiAnalysis: { analysis: aiResult.content, model: aiResult.model, analyzedAt: new Date() } });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+    res.json({ ...item.toJSON(), aiAnalysis: { ...parsed, model: aiResult.model, analyzedAt: new Date() } });
+  } catch (error) { res.status(500).json({ error: error.message }); }
 });
 
 module.exports = router;

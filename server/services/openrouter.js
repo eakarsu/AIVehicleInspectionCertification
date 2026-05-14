@@ -1,12 +1,25 @@
 const https = require('https');
 require('dotenv').config({ path: '../.env' });
 
+function parseAIJson(content) {
+  try { return JSON.parse(content); } catch {}
+  try {
+    const stripped = content.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+    return JSON.parse(stripped);
+  } catch {}
+  try {
+    const match = content.match(/\{[\s\S]*\}/);
+    if (match) return JSON.parse(match[0]);
+  } catch {}
+  return null;
+}
+
 async function callOpenRouter(prompt, systemPrompt = '') {
   const apiKey = process.env.OPENROUTER_API_KEY;
-  const model = process.env.OPENROUTER_MODEL || 'anthropic/claude-haiku-4.5';
+  const model = 'anthropic/claude-3-5-sonnet-20241022';
 
   const payload = JSON.stringify({
-    model: model,
+    model,
     messages: [
       ...(systemPrompt ? [{ role: 'system', content: systemPrompt }] : []),
       { role: 'user', content: prompt }
@@ -38,11 +51,7 @@ async function callOpenRouter(prompt, systemPrompt = '') {
             reject(new Error(parsed.error.message || 'OpenRouter API error'));
           } else {
             const content = parsed.choices?.[0]?.message?.content || '';
-            resolve({
-              content,
-              model: parsed.model,
-              usage: parsed.usage
-            });
+            resolve({ content, model: parsed.model, usage: parsed.usage });
           }
         } catch (e) {
           reject(new Error('Failed to parse OpenRouter response'));
@@ -56,4 +65,15 @@ async function callOpenRouter(prompt, systemPrompt = '') {
   });
 }
 
-module.exports = { callOpenRouter };
+async function persistAIResult(sequelize, userId, endpoint, inputData, result) {
+  try {
+    await sequelize.query(
+      'INSERT INTO ai_results (user_id, endpoint, input_data, result) VALUES ($1, $2, $3, $4)',
+      { bind: [userId, endpoint, JSON.stringify(inputData), JSON.stringify(result)], type: sequelize.QueryTypes.INSERT }
+    );
+  } catch (e) {
+    console.error('Failed to persist AI result:', e.message);
+  }
+}
+
+module.exports = { callOpenRouter, parseAIJson, persistAIResult };

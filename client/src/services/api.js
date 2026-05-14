@@ -109,4 +109,25 @@ export const updatePartsPricing = (id, data) => api.put(`/parts-pricing/${id}`, 
 export const deletePartsPricing = (id) => api.delete(`/parts-pricing/${id}`);
 export const analyzePartsPricing = (id) => api.post(`/parts-pricing/${id}/analyze`);
 
+// Vehicles (VIN decoder, recalls)
+export const decodeVIN = (vin) => api.post('/vehicles/decode-vin', { vin });
+export const checkRecalls = (id) => api.post(`/vehicles/${id}/check-recalls`);
+
+// Dashboard
+export const getFleetSummary = () => api.get('/dashboard/fleet-summary');
+
+// AI Tools (text-only)
+export const aiPredictiveMaintenance = (data) => api.post('/ai/predictive-maintenance', data);
+export const aiInsuranceEstimate = (data) => api.post('/ai/insurance-estimate', data);
+export const aiRecallSummary = (data) => api.post('/ai/recall-summary', data);
+export const aiNhtsaRecallLookup = (data) => api.post('/ai/nhtsa-recall-lookup', data);
+export const aiPartsPriceMonitor = (data) => api.post('/ai/parts-price-monitor', data);
+
+// Inspection extra
+export const uploadInspectionImage = (id, formData) => api.post(`/inspections/${id}/upload-image`, formData, { headers: { 'Content-Type': 'multipart/form-data' } });
+export const visionAnalyzeInspection = (id, formData) => api.post(`/inspections/${id}/vision-analyze`, formData, { headers: { 'Content-Type': 'multipart/form-data' } });
+export const getInspectionCertificatePDF = (id) => api.get(`/inspections/${id}/certificate-pdf`, { responseType: 'blob' });
+export const certifyInspection = (id) => api.post(`/inspections/${id}/certify`);
+
 export default api;
+

@@ -13,6 +13,15 @@ const navItems = [
   { path: '/insurance-estimates', label: 'Insurance Estimates', icon: '🛡️', color: '#14b8a6' },
   { path: '/maintenance-schedules', label: 'Maintenance', icon: '🔩', color: '#a855f7' },
   { path: '/parts-pricing', label: 'Parts Pricing', icon: '🏷️', color: '#ec4899' },
+  { path: '/fleet-summary', label: 'Fleet Summary', icon: '🚗', color: '#22d3ee' },
+  { path: '/vin-decoder', label: 'VIN Decoder', icon: '🔢', color: '#a3e635' },
+  { path: '/vision-damage', label: 'Vision Damage', icon: '📸', color: '#fb923c' },
+  { path: '/certificates', label: 'Certificates', icon: '📄', color: '#34d399' },
+  { path: '/ai/predictive-maintenance', label: 'AI Predictive Maint.', icon: '🤖', color: '#3b82f6' },
+  { path: '/ai/insurance-estimate', label: 'AI Insurance Est.', icon: '💵', color: '#14b8a6' },
+  { path: '/ai/recall-summary', label: 'AI Recall Summary', icon: '🔔', color: '#f97316' },
+  { path: '/ai/nhtsa-recall-lookup', label: 'NHTSA Recall Lookup', icon: '🛡️', color: '#ef4444' },
+  { path: '/ai/parts-price-monitor', label: 'Parts Price Monitor', icon: '💲', color: '#84cc16' },
 ];
 
 function Layout({ children, user, onLogout }) {

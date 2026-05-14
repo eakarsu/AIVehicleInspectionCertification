@@ -25,6 +25,33 @@ import MaintenanceSchedulesPage from './pages/MaintenanceSchedulesPage';
 import MaintenanceScheduleDetail from './pages/MaintenanceScheduleDetail';
 import PartsPricingPage from './pages/PartsPricingPage';
 import PartsPricingDetail from './pages/PartsPricingDetail';
+import VINDecoder from './pages/VINDecoder';
+import VisionDamageDetector from './pages/VisionDamageDetector';
+import FleetSummary from './pages/FleetSummary';
+import CertificatePDF from './pages/CertificatePDF';
+import AIPredictiveMaintenance from './pages/AIPredictiveMaintenance';
+import AIInsuranceEstimate from './pages/AIInsuranceEstimate';
+import AIRecallSummary from './pages/AIRecallSummary';
+import AINHTSARecallLookup from './pages/AINHTSARecallLookup';
+import AIPartsPriceMonitor from './pages/AIPartsPriceMonitor';
+// === Batch 08 Gaps & Frontend Mounts ===
+import CfVisionBasedDamageAssessmentFromPhotosWith from './pages/CfVisionBasedDamageAssessmentFromPhotosWith'
+import CfPredictiveMaintenanceFlaggingVehiclesByAgeMileage from './pages/CfPredictiveMaintenanceFlaggingVehiclesByAgeMileage'
+import CfPartsPriceMonitoringWithBulkOrderTiming from './pages/CfPartsPriceMonitoringWithBulkOrderTiming'
+import CfRepairShopNetworkWithQualityRatings from './pages/CfRepairShopNetworkWithQualityRatings'
+import CfInsuranceClaimAutomationGeneratingFilingsFromDamage from './pages/CfInsuranceClaimAutomationGeneratingFilingsFromDamage'
+import CfVinDecoderIntegrationForAutoPopulatedVehicle from './pages/CfVinDecoderIntegrationForAutoPopulatedVehicle'
+import GapCriticalNoAiForDamageAssessmentFrom from './pages/GapCriticalNoAiForDamageAssessmentFrom'
+import GapNoPredictiveMaintenanceMl from './pages/GapNoPredictiveMaintenanceMl'
+import GapNoInsuranceEstimateGenerationAi from './pages/GapNoInsuranceEstimateGenerationAi'
+import GapNoFraudDetectionOnInspectionData from './pages/GapNoFraudDetectionOnInspectionData'
+import GapNoIntegrationWithOemRecallDatabasesOnly from './pages/GapNoIntegrationWithOemRecallDatabasesOnly'
+import GapNoPartsSupplierIntegration from './pages/GapNoPartsSupplierIntegration'
+import GapNoThirdPartyRepairShopNetwork from './pages/GapNoThirdPartyRepairShopNetwork'
+import GapNoInsuranceClaimIntegrationDirectInsurerApi from './pages/GapNoInsuranceClaimIntegrationDirectInsurerApi'
+import GapNoWebhooksNotificationsForRecallEvents from './pages/GapNoWebhooksNotificationsForRecallEvents'
+import GapNoAuditLogging from './pages/GapNoAuditLogging'
+import GapNoCustomerSelfServicePortal from './pages/GapNoCustomerSelfServicePortal'
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -58,7 +85,25 @@ function App() {
       <>
         <Router>
           <Routes>
-            <Route path="*" element={<Login onLogin={handleLogin} />} />
+            {/* // === Batch 08 Gaps & Frontend Mounts === */}
+      <Route path="/cf-vision-based-damage-assessment-from-photos-with-repair-cost" element={<ProtectedRoute><CfVisionBasedDamageAssessmentFromPhotosWith /></ProtectedRoute>} />
+      <Route path="/cf-predictive-maintenance-flagging-vehicles-by-age-mileage-condition" element={<ProtectedRoute><CfPredictiveMaintenanceFlaggingVehiclesByAgeMileage /></ProtectedRoute>} />
+      <Route path="/cf-parts-price-monitoring-with-bulk-order-timing-recommendations" element={<ProtectedRoute><CfPartsPriceMonitoringWithBulkOrderTiming /></ProtectedRoute>} />
+      <Route path="/cf-repair-shop-network-with-quality-ratings" element={<ProtectedRoute><CfRepairShopNetworkWithQualityRatings /></ProtectedRoute>} />
+      <Route path="/cf-insurance-claim-automation-generating-filings-from-damage-photos" element={<ProtectedRoute><CfInsuranceClaimAutomationGeneratingFilingsFromDamage /></ProtectedRoute>} />
+      <Route path="/cf-vin-decoder-integration-for-auto-populated-vehicle-profiles" element={<ProtectedRoute><CfVinDecoderIntegrationForAutoPopulatedVehicle /></ProtectedRoute>} />
+      <Route path="/gap-critical-no-ai-for-damage-assessment-from-photos" element={<ProtectedRoute><GapCriticalNoAiForDamageAssessmentFrom /></ProtectedRoute>} />
+      <Route path="/gap-no-predictive-maintenance-ml" element={<ProtectedRoute><GapNoPredictiveMaintenanceMl /></ProtectedRoute>} />
+      <Route path="/gap-no-insurance-estimate-generation-ai" element={<ProtectedRoute><GapNoInsuranceEstimateGenerationAi /></ProtectedRoute>} />
+      <Route path="/gap-no-fraud-detection-on-inspection-data" element={<ProtectedRoute><GapNoFraudDetectionOnInspectionData /></ProtectedRoute>} />
+      <Route path="/gap-no-integration-with-oem-recall-databases-only-manual" element={<ProtectedRoute><GapNoIntegrationWithOemRecallDatabasesOnly /></ProtectedRoute>} />
+      <Route path="/gap-no-parts-supplier-integration" element={<ProtectedRoute><GapNoPartsSupplierIntegration /></ProtectedRoute>} />
+      <Route path="/gap-no-third-party-repair-shop-network" element={<ProtectedRoute><GapNoThirdPartyRepairShopNetwork /></ProtectedRoute>} />
+      <Route path="/gap-no-insurance-claim-integration-direct-insurer-api" element={<ProtectedRoute><GapNoInsuranceClaimIntegrationDirectInsurerApi /></ProtectedRoute>} />
+      <Route path="/gap-no-webhooks-notifications-for-recall-events" element={<ProtectedRoute><GapNoWebhooksNotificationsForRecallEvents /></ProtectedRoute>} />
+      <Route path="/gap-no-audit-logging" element={<ProtectedRoute><GapNoAuditLogging /></ProtectedRoute>} />
+      <Route path="/gap-no-customer-self-service-portal" element={<ProtectedRoute><GapNoCustomerSelfServicePortal /></ProtectedRoute>} />
+      <Route path="*" element={<Login onLogin={handleLogin} />} />
           </Routes>
         </Router>
         <ToastContainer theme="dark" position="top-right" />
@@ -92,6 +137,15 @@ function App() {
           <Route path="/maintenance-schedules/:id" element={<MaintenanceScheduleDetail />} />
           <Route path="/parts-pricing" element={<PartsPricingPage />} />
           <Route path="/parts-pricing/:id" element={<PartsPricingDetail />} />
+          <Route path="/vin-decoder" element={<VINDecoder />} />
+          <Route path="/vision-damage" element={<VisionDamageDetector />} />
+          <Route path="/fleet-summary" element={<FleetSummary />} />
+          <Route path="/certificates" element={<CertificatePDF />} />
+          <Route path="/ai/predictive-maintenance" element={<AIPredictiveMaintenance />} />
+          <Route path="/ai/insurance-estimate" element={<AIInsuranceEstimate />} />
+          <Route path="/ai/recall-summary" element={<AIRecallSummary />} />
+          <Route path="/ai/nhtsa-recall-lookup" element={<AINHTSARecallLookup />} />
+          <Route path="/ai/parts-price-monitor" element={<AIPartsPriceMonitor />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </Layout>
