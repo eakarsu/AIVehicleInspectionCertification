@@ -36,6 +36,7 @@ app.use('/api/parts-pricing', require('./routes/partsPricing'));
 app.use('/api/vehicles', require('./routes/vehicles'));
 app.use('/api/dashboard', require('./routes/dashboard'));
 app.use('/api/ai', require('./routes/ai'));
+app.use('/api/adas-calibration-readiness', require('./routes/adasCalibrationReadiness'));
 
 // Health check
 app.get('/api/health', (req, res) => {

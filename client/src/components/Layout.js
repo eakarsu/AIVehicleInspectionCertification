@@ -22,6 +22,7 @@ const navItems = [
   { path: '/ai/recall-summary', label: 'AI Recall Summary', icon: '🔔', color: '#f97316' },
   { path: '/ai/nhtsa-recall-lookup', label: 'NHTSA Recall Lookup', icon: '🛡️', color: '#ef4444' },
   { path: '/ai/parts-price-monitor', label: 'Parts Price Monitor', icon: '💲', color: '#84cc16' },
+  { path: '/adas-calibration-readiness', label: 'ADAS Calibration', icon: '🎯', color: '#22d3ee' },
 ];
 
 function Layout({ children, user, onLogout }) {

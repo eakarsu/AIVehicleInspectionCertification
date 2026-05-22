@@ -34,6 +34,12 @@ import AIInsuranceEstimate from './pages/AIInsuranceEstimate';
 import AIRecallSummary from './pages/AIRecallSummary';
 import AINHTSARecallLookup from './pages/AINHTSARecallLookup';
 import AIPartsPriceMonitor from './pages/AIPartsPriceMonitor';
+import ADASCalibrationReadiness from './pages/ADASCalibrationReadiness';
+import CodexCustomVizFeature from './pages/CodexCustomVizFeature';
+import CodexOperationsFeature from './pages/CodexOperationsFeature';
+
+import TimelineView from './pages/TimelineView';
+
 // === Batch 08 Gaps & Frontend Mounts ===
 import CfVisionBasedDamageAssessmentFromPhotosWith from './pages/CfVisionBasedDamageAssessmentFromPhotosWith'
 import CfPredictiveMaintenanceFlaggingVehiclesByAgeMileage from './pages/CfPredictiveMaintenanceFlaggingVehiclesByAgeMileage'
@@ -85,6 +91,10 @@ function App() {
       <>
         <Router>
           <Routes>
+        <Route path="/insights/timeline" element={<ProtectedRoute><TimelineView /></ProtectedRoute>} />
+        <Route path="/codex/custom-viz" element={<CodexCustomVizFeature />} />
+        <Route path="/codex/operations" element={<CodexOperationsFeature />} />
+
             {/* // === Batch 08 Gaps & Frontend Mounts === */}
       <Route path="/cf-vision-based-damage-assessment-from-photos-with-repair-cost" element={<ProtectedRoute><CfVisionBasedDamageAssessmentFromPhotosWith /></ProtectedRoute>} />
       <Route path="/cf-predictive-maintenance-flagging-vehicles-by-age-mileage-condition" element={<ProtectedRoute><CfPredictiveMaintenanceFlaggingVehiclesByAgeMileage /></ProtectedRoute>} />
@@ -146,6 +156,7 @@ function App() {
           <Route path="/ai/recall-summary" element={<AIRecallSummary />} />
           <Route path="/ai/nhtsa-recall-lookup" element={<AINHTSARecallLookup />} />
           <Route path="/ai/parts-price-monitor" element={<AIPartsPriceMonitor />} />
+          <Route path="/adas-calibration-readiness" element={<ADASCalibrationReadiness />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </Layout>
