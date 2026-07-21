@@ -3,6 +3,7 @@ require('dotenv').config({ path: path.join(__dirname, '..', '..', '.env') });
 const bcrypt = require('bcryptjs');
 const { sequelize, User, Inspection, Compliance, ConditionScore, MarketValue, DamageReport, VehicleHistory, RecallAlert, InsuranceEstimate, MaintenanceSchedule, PartsPricing } = require('../models');
 
+if(process.env.ALLOW_DESTRUCTIVE_DEMO_SEED!=='true'){console.error('Refusing destructive demo seed; set ALLOW_DESTRUCTIVE_DEMO_SEED=true only for an isolated disposable database.');process.exit(2);}
 async function seed() {
   try {
     await sequelize.authenticate();

@@ -5,6 +5,7 @@ const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
 
 const { sequelize } = require('./models');
+const auth = require('./middleware/auth');
 
 const app = express();
 const PORT = process.env.SERVER_PORT || 3001;
@@ -21,8 +22,12 @@ app.use(express.urlencoded({ extended: true }));
 // Serve uploaded files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Routes
+app.get('/api/health', (req, res) => res.json({ status: 'ok', timestamp: new Date().toISOString() }));
 app.use('/api/auth', require('./routes/auth'));
+app.use('/api', auth);
+app.use('/api/inspection-workflow', require('./routes/inspectionWorkflow'));
+app.use(/^\/api\/(?:ai(?:\/|$)|gap-|integrations?(?:\/|$)|webhooks?(?:\/|$)|vision-damage-assessment|predictive-maintenance|parts-price-monitor|repair-shop-network|insurance-claim-automation|vin-decoder)/, (_req,res)=>res.status(503).json({error:'generated/direct-provider endpoints are quarantined; use inspection-workflow deliveries'}));
+// Routes
 app.use('/api/inspections', require('./routes/inspections'));
 app.use('/api/compliance', require('./routes/compliance'));
 app.use('/api/condition-scores', require('./routes/conditionScores'));
@@ -38,35 +43,13 @@ app.use('/api/dashboard', require('./routes/dashboard'));
 app.use('/api/ai', require('./routes/ai'));
 app.use('/api/adas-calibration-readiness', require('./routes/adasCalibrationReadiness'));
 
-// Health check
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() });
-});
-
 // Start server
 async function start() {
   try {
     await sequelize.authenticate();
     console.log('Database connected successfully');
-    await sequelize.sync({ force: false });
-    console.log('Database synced');
-
-    // Create ai_results table
-    await sequelize.query(`
-      CREATE TABLE IF NOT EXISTS ai_results (
-        id SERIAL PRIMARY KEY,
-        user_id INTEGER,
-        endpoint VARCHAR(100),
-        input_data JSONB,
-        result JSONB,
-        created_at TIMESTAMP DEFAULT NOW()
-      )
-    `);
-
-    // Create uploads directory
-    const fs = require('fs');
-    const uploadsDir = path.join(__dirname, 'uploads');
-    if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
+    const [ready] = await sequelize.query("SELECT to_regclass('public.inspection_workflows') AS workflow, to_regclass('public.inspection_workflow_audit') AS audit");
+    if (!ready[0].workflow || !ready[0].audit) throw new Error('database migrations are pending; run npm run migrate');
 
     app.use('/api/vision-damage-assessment', require('./routes/visionDamageAssessment')); app.use('/api/predictive-maintenance', require('./routes/predictiveMaintenance')); app.use('/api/parts-price-monitor', require('./routes/partsPriceMonitor')); app.use('/api/repair-shop-network', require('./routes/repairShopNetwork')); app.use('/api/insurance-claim-automation', require('./routes/insuranceClaimAutomation')); app.use('/api/vin-decoder', require('./routes/vinDecoder'));
 

@@ -1,0 +1,10 @@
+const test = require('node:test'); const assert = require('node:assert/strict'); const p = require('../domain/inspectionWorkflow');
+test('VIN excludes ambiguous letters', () => assert.throws(() => p.validateVehicle({ vin: 'IIIIIIIIIIIIIIIII', odometer: 1 }), /VIN/));
+test('vehicle evidence is bounded', () => assert.equal(p.validateVehicle({ vin: '1HGCM82633A004352', odometer: 90000 }), true));
+test('state jumps fail', () => assert.throws(() => p.transition({ status: 'intake', version: 1 }, 'certified'), /invalid/));
+test('submitter cannot certify', () => assert.throws(() => p.transition({ status: 'inspector_review', version: 1, submitterId: 'a' }, 'certified', { inspectorId: 'a', findingsReviewed: true }), /independent/));
+test('OEM retry is first class', () => assert.equal(p.acceptRecallReceipt({ provider: 'oem', idempotencyKey: 'k', checkedAt: '2026-01-01', status: 'retrying' }), true));
+test('fixtures include failure and latency', () => assert.equal(p.evaluateFixture({ expectedOutcome: 'escalate', latencyMs: 20, failureMode: 'timeout' }), true));
+test('owner subject can read',()=>assert.equal(p.assertScope({tenantId:'t',ownerId:'s'},{tenantId:'t',subjectId:'s',role:'user'},['inspector']),true));
+test('other subject is hidden',()=>assert.throws(()=>p.assertScope({tenantId:'t',ownerId:'s'},{tenantId:'t',subjectId:'x',role:'user'},['inspector']),/subject/));
+test('inspection evidence requires consent',()=>assert.throws(()=>p.validateEvidence({uri:'x',checksum:'y',observedAt:'2026-01-01'}),/consent/));

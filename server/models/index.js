@@ -8,6 +8,7 @@ const User = sequelize.define('User', {
   password: { type: DataTypes.STRING, allowNull: false },
   name: { type: DataTypes.STRING, allowNull: false },
   role: { type: DataTypes.STRING, defaultValue: 'user' }
+  ,tenantId: { type: DataTypes.STRING, field: 'tenant_id', allowNull: true }
 }, { tableName: 'users', timestamps: true });
 
 // Vehicle Inspection Model

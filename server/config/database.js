@@ -1,7 +1,7 @@
 const { Sequelize } = require('sequelize');
-require('dotenv').config({ path: '../.env' });
+const { databaseUrl } = require('./security');
 
-const sequelize = new Sequelize(process.env.DATABASE_URL, {
+const sequelize = new Sequelize(databaseUrl, {
   dialect: 'postgres',
   logging: false,
   pool: {
