@@ -15,8 +15,15 @@ function parseAIJson(content) {
 }
 
 async function callOpenRouter(prompt, systemPrompt = '') {
-  const apiKey = process.env.OPENROUTER_API_KEY;
-  const model = process.env.OPENROUTER_MODEL || 'anthropic/claude-haiku-4.5';
+  const apiKey = process.env.OPENROUTER_API_KEY || '';
+  const model = process.env.OPENROUTER_MODEL || '';
+  const baseUrl = (process.env.OPENROUTER_BASE_URL || '').replace(/\/$/, '');
+  if (!apiKey) throw new Error('OPENROUTER_API_KEY is required');
+  if (!model) throw new Error('OPENROUTER_MODEL is required');
+  if (baseUrl !== 'https://openrouter.ai/api/v1') {
+    throw new Error('OPENROUTER_BASE_URL must be https://openrouter.ai/api/v1');
+  }
+  const endpoint = new URL(`${baseUrl}/chat/completions`);
 
   const payload = JSON.stringify({
     model,
@@ -30,8 +37,8 @@ async function callOpenRouter(prompt, systemPrompt = '') {
 
   return new Promise((resolve, reject) => {
     const options = {
-      hostname: 'openrouter.ai',
-      path: '/api/v1/chat/completions',
+      hostname: endpoint.hostname,
+      path: endpoint.pathname,
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -51,6 +58,7 @@ async function callOpenRouter(prompt, systemPrompt = '') {
             reject(new Error(parsed.error.message || 'OpenRouter API error'));
           } else {
             const content = parsed.choices?.[0]?.message?.content || '';
+            if (!content.trim()) return reject(new Error('OpenRouter returned an empty response'));
             resolve({ content, model: parsed.model, usage: parsed.usage });
           }
         } catch (e) {
@@ -66,14 +74,10 @@ async function callOpenRouter(prompt, systemPrompt = '') {
 }
 
 async function persistAIResult(sequelize, userId, endpoint, inputData, result) {
-  try {
-    await sequelize.query(
-      'INSERT INTO ai_results (user_id, endpoint, input_data, result) VALUES ($1, $2, $3, $4)',
-      { bind: [userId, endpoint, JSON.stringify(inputData), JSON.stringify(result)], type: sequelize.QueryTypes.INSERT }
-    );
-  } catch (e) {
-    console.error('Failed to persist AI result:', e.message);
-  }
+  await sequelize.query(
+    'INSERT INTO ai_results (user_id, endpoint, input_data, result) VALUES ($1, $2, $3, $4)',
+    { bind: [userId, endpoint, JSON.stringify(inputData), JSON.stringify(result)], type: sequelize.QueryTypes.INSERT }
+  );
 }
 
 module.exports = { callOpenRouter, parseAIJson, persistAIResult };

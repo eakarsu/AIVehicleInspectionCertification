@@ -26,7 +26,7 @@ app.get('/api/health', (req, res) => res.json({ status: 'ok', timestamp: new Dat
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api', auth);
 app.use('/api/inspection-workflow', require('./routes/inspectionWorkflow'));
-app.use(/^\/api\/(?:ai(?:\/|$)|gap-|integrations?(?:\/|$)|webhooks?(?:\/|$)|vision-damage-assessment|predictive-maintenance|parts-price-monitor|repair-shop-network|insurance-claim-automation|vin-decoder)/, (_req,res)=>res.status(503).json({error:'generated/direct-provider endpoints are quarantined; use inspection-workflow deliveries'}));
+app.use(/^\/api\/(?:gap-|integrations?(?:\/|$)|webhooks?(?:\/|$)|vision-damage-assessment|predictive-maintenance|parts-price-monitor|repair-shop-network|insurance-claim-automation|vin-decoder)/, (_req,res)=>res.status(503).json({error:'generated/direct-provider endpoints are quarantined; use inspection-workflow deliveries'}));
 // Routes
 app.use('/api/inspections', require('./routes/inspections'));
 app.use('/api/compliance', require('./routes/compliance'));
@@ -50,21 +50,6 @@ async function start() {
     console.log('Database connected successfully');
     const [ready] = await sequelize.query("SELECT to_regclass('public.inspection_workflows') AS workflow, to_regclass('public.inspection_workflow_audit') AS audit");
     if (!ready[0].workflow || !ready[0].audit) throw new Error('database migrations are pending; run npm run migrate');
-
-    app.use('/api/vision-damage-assessment', require('./routes/visionDamageAssessment')); app.use('/api/predictive-maintenance', require('./routes/predictiveMaintenance')); app.use('/api/parts-price-monitor', require('./routes/partsPriceMonitor')); app.use('/api/repair-shop-network', require('./routes/repairShopNetwork')); app.use('/api/insurance-claim-automation', require('./routes/insuranceClaimAutomation')); app.use('/api/vin-decoder', require('./routes/vinDecoder'));
-
-// === Batch 08 Gaps & Frontend Mounts ===
-app.use('/api/gap-critical-no-ai-for-damage-assessment-from-photos', require('./routes/gapCriticalNoAiForDamageAssessmentFromPhotos'));
-app.use('/api/gap-no-predictive-maintenance-ml', require('./routes/gapNoPredictiveMaintenanceMl'));
-app.use('/api/gap-no-insurance-estimate-generation-ai', require('./routes/gapNoInsuranceEstimateGenerationAi'));
-app.use('/api/gap-no-fraud-detection-on-inspection-data', require('./routes/gapNoFraudDetectionOnInspectionData'));
-app.use('/api/gap-no-integration-with-oem-recall-databases-only-manual', require('./routes/gapNoIntegrationWithOemRecallDatabasesOnlyManual'));
-app.use('/api/gap-no-parts-supplier-integration', require('./routes/gapNoPartsSupplierIntegration'));
-app.use('/api/gap-no-third-party-repair-shop-network', require('./routes/gapNoThirdPartyRepairShopNetwork'));
-app.use('/api/gap-no-insurance-claim-integration-direct-insurer-api', require('./routes/gapNoInsuranceClaimIntegrationDirectInsurerApi'));
-app.use('/api/gap-no-webhooks-notifications-for-recall-events', require('./routes/gapNoWebhooksNotificationsForRecallEvents'));
-app.use('/api/gap-no-audit-logging', require('./routes/gapNoAuditLogging'));
-app.use('/api/gap-no-customer-self-service-portal', require('./routes/gapNoCustomerSelfServicePortal'));
 
 app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
