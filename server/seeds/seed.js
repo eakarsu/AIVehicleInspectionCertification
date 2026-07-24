@@ -4,6 +4,12 @@ const bcrypt = require('bcryptjs');
 const { sequelize, User, Inspection, Compliance, ConditionScore, MarketValue, DamageReport, VehicleHistory, RecallAlert, InsuranceEstimate, MaintenanceSchedule, PartsPricing } = require('../models');
 
 if(process.env.ALLOW_DESTRUCTIVE_DEMO_SEED!=='true'){console.error('Refusing destructive demo seed; set ALLOW_DESTRUCTIVE_DEMO_SEED=true only for an isolated disposable database.');process.exit(2);}
+function requireDemoPassword() {
+  const password = process.env.DEMO_PASSWORD || process.env.SEED_DEMO_PASSWORD || process.env.DEMO_SEED_PASSWORD || '';
+  if (password.length < 12 || password.length > 1024) throw new Error('DEMO_PASSWORD must contain 12-1024 characters');
+  return password;
+}
+
 async function seed() {
   try {
     await sequelize.authenticate();
@@ -12,7 +18,7 @@ async function seed() {
     console.log('Tables created');
 
     // Seed Users
-    const hashedPassword = await bcrypt.hash('password123', 10);
+    const hashedPassword = await bcrypt.hash(requireDemoPassword(), 10);
     await User.bulkCreate([
       { email: 'admin@autoinspect.com', password: hashedPassword, name: 'Admin User', role: 'admin' },
       { email: 'inspector@autoinspect.com', password: hashedPassword, name: 'John Inspector', role: 'inspector' },
@@ -221,8 +227,8 @@ async function seed() {
     console.log('Parts Pricing seeded (15)');
 
     console.log('\n=== Seed Complete ===');
-    console.log('Demo Login: demo@autoinspect.com / password123');
-    console.log('Admin Login: admin@autoinspect.com / password123');
+    console.log('Demo login users provisioned from the local environment.');
+    console.log('Demo login users provisioned from the local environment.');
     process.exit(0);
   } catch (error) {
     console.error('Seed failed:', error);
