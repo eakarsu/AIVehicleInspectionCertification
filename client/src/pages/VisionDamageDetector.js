@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { getInspections, visionAnalyzeInspection } from '../services/api';
 import { toast } from 'react-toastify';
+import CompleteAIExamples, { AIRequiredButton } from '../components/CompleteAIExamples';
+import FormattedAIReport from '../components/FormattedAIReport';
 
 const SEVERITY_COLORS = { minor: 'green', moderate: 'yellow', severe: 'red', unknown: 'gray' };
 
@@ -38,12 +40,14 @@ export default function VisionDamageDetector() {
   return (
     <div className="max-w-4xl mx-auto p-6">
       <h1 className="text-2xl font-bold text-white mb-6">Vision Damage Detector</h1>
-      <form onSubmit={handleAnalyze} className="bg-gray-800 rounded-lg p-6 mb-6">
+      <CompleteAIExamples busy={loading} context="Vehicle inspection damage assessment"><form onSubmit={handleAnalyze} className="bg-gray-800 rounded-lg p-6 mb-6">
         <div className="grid grid-cols-2 gap-4 mb-4">
           <div>
             <label className="block text-gray-300 text-sm font-medium mb-2">Inspection ID</label>
             <input
               type="number"
+              data-ai-field="inspection_id"
+              required
               value={inspectionId}
               onChange={(e) => setInspectionId(e.target.value)}
               placeholder="Enter inspection ID"
@@ -52,7 +56,7 @@ export default function VisionDamageDetector() {
           </div>
           <div>
             <label className="block text-gray-300 text-sm font-medium mb-2">Vehicle Photo (optional)</label>
-            <input type="file" accept="image/*" onChange={handleFileChange} className="w-full text-gray-300 text-sm" />
+            <input type="file" data-ai-field="vehicle_photo" accept="image/*" onChange={handleFileChange} className="w-full text-gray-300 text-sm" />
           </div>
         </div>
         {preview && (
@@ -60,14 +64,15 @@ export default function VisionDamageDetector() {
             <img src={preview} alt="Preview" className="max-h-48 rounded-lg border border-gray-600" />
           </div>
         )}
-        <button
+        <AIRequiredButton
           type="submit"
+          data-ai-generate
           disabled={loading}
           className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg font-medium disabled:opacity-50 transition-colors"
         >
           {loading ? 'Analyzing...' : 'Analyze Damage'}
-        </button>
-      </form>
+        </AIRequiredButton>
+      </form></CompleteAIExamples>
 
       {result && (
         <div className="bg-gray-800 rounded-lg p-6">
@@ -94,16 +99,7 @@ export default function VisionDamageDetector() {
             <p className="text-gray-400 mb-4">No specific damage areas identified</p>
           )}
 
-          <div className="flex justify-between items-center bg-gray-700 rounded-lg p-4">
-            <span className="text-gray-300">Estimated Repair Cost</span>
-            <span className="text-green-400 font-bold text-xl">${result.repair_cost_estimate?.toLocaleString() || 0}</span>
-          </div>
-
-          {result.annotated_notes && (
-            <div className="mt-4 bg-gray-700 rounded-lg p-4">
-              <p className="text-gray-400 text-sm"><strong className="text-white">Notes:</strong> {result.annotated_notes}</p>
-            </div>
-          )}
+          <FormattedAIReport response={result} title="Damage analysis" />
         </div>
       )}
     </div>

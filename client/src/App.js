@@ -59,6 +59,14 @@ import GapNoWebhooksNotificationsForRecallEvents from './pages/GapNoWebhooksNoti
 import GapNoAuditLogging from './pages/GapNoAuditLogging'
 import GapNoCustomerSelfServicePortal from './pages/GapNoCustomerSelfServicePortal'
 
+// Guard used by the batch08 generated routes below. Without this definition the
+// unauthenticated render throws "ProtectedRoute is not defined" and the login
+// screen never mounts.
+function ProtectedRoute({ children }) {
+  const token = localStorage.getItem('token');
+  return token ? children : <Navigate to="/" replace />;
+}
+
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);

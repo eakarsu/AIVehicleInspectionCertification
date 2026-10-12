@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactMarkdown from 'react-markdown';
+import FormattedAIReport from './FormattedAIReport';
 
 function AIAnalysisDisplay({ analysis, loading }) {
   if (loading) {
@@ -15,7 +15,6 @@ function AIAnalysisDisplay({ analysis, loading }) {
 
   if (!analysis) return null;
 
-  const content = typeof analysis === 'object' ? analysis.analysis : analysis;
   const model = typeof analysis === 'object' ? analysis.model : null;
   const analyzedAt = typeof analysis === 'object' ? analysis.analyzedAt : null;
 
@@ -34,7 +33,7 @@ function AIAnalysisDisplay({ analysis, loading }) {
         {model && <span className="ai-model">{model}</span>}
       </div>
       <div className="ai-analysis-content">
-        <ReactMarkdown>{content}</ReactMarkdown>
+        <FormattedAIReport response={analysis} title="AI Analysis Report" model={model} />
       </div>
     </div>
   );

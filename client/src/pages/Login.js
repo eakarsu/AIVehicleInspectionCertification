@@ -21,8 +21,15 @@ function Login({ onLogin }) {
   };
 
   const autoFill = () => {
-    setEmail(process.env.REACT_APP_DEMO_EMAIL || '');
-    setPassword(process.env.REACT_APP_DEMO_PASSWORD || '');
+    const demoEmail = process.env.REACT_APP_DEMO_EMAIL;
+    const demoPassword = process.env.REACT_APP_DEMO_PASSWORD;
+    if (!demoEmail || !demoPassword) {
+      setError('Demo credentials are not configured for this client. Ask the administrator for access.');
+      return;
+    }
+    setError('');
+    setEmail(demoEmail);
+    setPassword(demoPassword);
   };
 
   return (
@@ -63,7 +70,7 @@ function Login({ onLogin }) {
         </form>
 
         <button type="button" className="btn auto-fill-btn" onClick={autoFill}>
-          Auto Fill Demo Credentials (Click to fill credentials)
+          Fill Demo Credentials
         </button>
       </div>
     </div>

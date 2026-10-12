@@ -1,0 +1,121 @@
+[
+  {
+    "name": "CfInsuranceClaimAutomationGeneratingFilingsFromDamage",
+    "id": "cf-insurance-claim-automation-generating-filings-from-damage-photos/history",
+    "title": "Insurance claim automation generating filings from damage photos",
+    "description": "Prepare a professional advisory report for insurance claim automation generating filings from damage photos using the brief and evidence you provide. Review the findings, assumptions, and action plan before applying changes.",
+    "samples": []
+  },
+  {
+    "name": "CfPartsPriceMonitoringWithBulkOrderTiming",
+    "id": "cf-parts-price-monitoring-with-bulk-order-timing-recommendations/history",
+    "title": "Parts price monitoring with bulk-order timing recommendations",
+    "description": "Prepare a professional advisory report for parts price monitoring with bulk-order timing recommendations using the brief and evidence you provide. Review the findings, assumptions, and action plan before applying changes.",
+    "samples": []
+  },
+  {
+    "name": "CfPredictiveMaintenanceFlaggingVehiclesByAgeMileage",
+    "id": "cf-predictive-maintenance-flagging-vehicles-by-age-mileage-condition/history",
+    "title": "Predictive maintenance flagging vehicles by age/mileage/condition",
+    "description": "Prepare a professional advisory report for predictive maintenance flagging vehicles by age/mileage/condition using the brief and evidence you provide. Review the findings, assumptions, and action plan before applying changes.",
+    "samples": []
+  },
+  {
+    "name": "CfRepairShopNetworkWithQualityRatings",
+    "id": "cf-repair-shop-network-with-quality-ratings/history",
+    "title": "Repair shop network with quality ratings",
+    "description": "Prepare a professional advisory report for repair shop network with quality ratings using the brief and evidence you provide. Review the findings, assumptions, and action plan before applying changes.",
+    "samples": []
+  },
+  {
+    "name": "CfVinDecoderIntegrationForAutoPopulatedVehicle",
+    "id": "cf-vin-decoder-integration-for-auto-populated-vehicle-profiles/history",
+    "title": "VIN-decoder integration for auto-populated vehicle profiles",
+    "description": "Prepare a professional advisory report for vin-decoder integration for auto-populated vehicle profiles using the brief and evidence you provide. Review the findings, assumptions, and action plan before applying changes.",
+    "samples": []
+  },
+  {
+    "name": "CfVisionBasedDamageAssessmentFromPhotosWith",
+    "id": "cf-vision-based-damage-assessment-from-photos-with-repair-cost/history",
+    "title": "Vision-based damage assessment from photos with repair cost estimates",
+    "description": "Prepare a professional advisory report for vision-based damage assessment from photos with repair cost estimates using the brief and evidence you provide. Review the findings, assumptions, and action plan before applying changes.",
+    "samples": []
+  },
+  {
+    "name": "GapCriticalNoAiForDamageAssessmentFrom",
+    "id": "gap-critical-no-ai-for-damage-assessment-from-photos/history",
+    "title": "Critical: No AI for damage assessment from photos",
+    "description": "Prepare a professional advisory report for critical: no ai for damage assessment from photos using the brief and evidence you provide. Review the findings, assumptions, and action plan before applying changes.",
+    "samples": []
+  },
+  {
+    "name": "GapNoAuditLogging",
+    "id": "gap-no-audit-logging/history",
+    "title": "No audit logging",
+    "description": "Prepare a professional advisory report for no audit logging using the brief and evidence you provide. Review the findings, assumptions, and action plan before applying changes.",
+    "samples": []
+  },
+  {
+    "name": "GapNoCustomerSelfServicePortal",
+    "id": "gap-no-customer-self-service-portal/history",
+    "title": "No customer self-service portal",
+    "description": "Prepare a professional advisory report for no customer self-service portal using the brief and evidence you provide. Review the findings, assumptions, and action plan before applying changes.",
+    "samples": []
+  },
+  {
+    "name": "GapNoFraudDetectionOnInspectionData",
+    "id": "gap-no-fraud-detection-on-inspection-data/history",
+    "title": "No fraud detection on inspection data",
+    "description": "Prepare a professional advisory report for no fraud detection on inspection data using the brief and evidence you provide. Review the findings, assumptions, and action plan before applying changes.",
+    "samples": []
+  },
+  {
+    "name": "GapNoInsuranceClaimIntegrationDirectInsurerApi",
+    "id": "gap-no-insurance-claim-integration-direct-insurer-api/history",
+    "title": "No insurance claim integration / direct insurer API",
+    "description": "Prepare a professional advisory report for no insurance claim integration / direct insurer api using the brief and evidence you provide. Review the findings, assumptions, and action plan before applying changes.",
+    "samples": []
+  },
+  {
+    "name": "GapNoInsuranceEstimateGenerationAi",
+    "id": "gap-no-insurance-estimate-generation-ai/history",
+    "title": "No insurance estimate generation AI",
+    "description": "Prepare a professional advisory report for no insurance estimate generation ai using the brief and evidence you provide. Review the findings, assumptions, and action plan before applying changes.",
+    "samples": []
+  },
+  {
+    "name": "GapNoIntegrationWithOemRecallDatabasesOnly",
+    "id": "gap-no-integration-with-oem-recall-databases-only-manual/history",
+    "title": "No integration with OEM recall databases (only manual entry)",
+    "description": "Prepare a professional advisory report for no integration with oem recall databases (only manual entry) using the brief and evidence you provide. Review the findings, assumptions, and action plan before applying changes.",
+    "samples": []
+  },
+  {
+    "name": "GapNoPartsSupplierIntegration",
+    "id": "gap-no-parts-supplier-integration/history",
+    "title": "No parts supplier integration",
+    "description": "Prepare a professional advisory report for no parts supplier integration using the brief and evidence you provide. Review the findings, assumptions, and action plan before applying changes.",
+    "samples": []
+  },
+  {
+    "name": "GapNoPredictiveMaintenanceMl",
+    "id": "gap-no-predictive-maintenance-ml/history",
+    "title": "No predictive maintenance ML",
+    "description": "Prepare a professional advisory report for no predictive maintenance ml using the brief and evidence you provide. Review the findings, assumptions, and action plan before applying changes.",
+    "samples": []
+  },
+  {
+    "name": "GapNoThirdPartyRepairShopNetwork",
+    "id": "gap-no-third-party-repair-shop-network/history",
+    "title": "No third-party repair shop network",
+    "description": "Prepare a professional advisory report for no third-party repair shop network using the brief and evidence you provide. Review the findings, assumptions, and action plan before applying changes.",
+    "samples": []
+  },
+  {
+    "name": "GapNoWebhooksNotificationsForRecallEvents",
+    "id": "gap-no-webhooks-notifications-for-recall-events/history",
+    "title": "No webhooks/notifications for recall events",
+    "description": "Prepare a professional advisory report for no webhooks/notifications for recall events using the brief and evidence you provide. Review the findings, assumptions, and action plan before applying changes.",
+    "samples": []
+  }
+]

@@ -26,6 +26,14 @@ app.get('/api/health', (req, res) => res.json({ status: 'ok', timestamp: new Dat
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api', auth);
 app.use('/api/inspection-workflow', require('./routes/inspectionWorkflow'));
+
+// Advisory AI reports only; native execution and approval routes stay unchanged.
+const aiWorkspaceSupport = require("./aiWorkspaceAdapters.cjs");
+const aiWorkspaceDatabase = aiWorkspaceSupport.sequelizeQueryClient(require("./config/database.js"));
+app.use('/api/report-workspace', require("./aiWorkspace.cjs").createAIWorkspaceRouter({
+  pool: aiWorkspaceDatabase, authenticateToken: require("./middleware/auth.js"),
+  aiRateLimiter: aiWorkspaceSupport.createWorkspaceLimiter(), features: require("./aiWorkspaceFeatures.json"),
+}));
 app.use(/^\/api\/(?:gap-|integrations?(?:\/|$)|webhooks?(?:\/|$)|vision-damage-assessment|predictive-maintenance|parts-price-monitor|repair-shop-network|insurance-claim-automation|vin-decoder)/, (_req,res)=>res.status(503).json({error:'generated/direct-provider endpoints are quarantined; use inspection-workflow deliveries'}));
 // Routes
 app.use('/api/inspections', require('./routes/inspections'));
